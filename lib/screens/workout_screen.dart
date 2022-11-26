@@ -178,8 +178,8 @@ class _EditWorkoutScreenTileState extends ConsumerState<EditWorkoutScreenTile> {
                       SetModel(
                         widget.model.index,
                         dropdownValue,
-                        int.parse(value),
-                        int.parse(_repsController.text),
+                        int.tryParse(value) ?? 0,
+                        int.tryParse(_repsController.text) ?? 0,
                       ),
                     );
               },
@@ -201,8 +201,8 @@ class _EditWorkoutScreenTileState extends ConsumerState<EditWorkoutScreenTile> {
                       SetModel(
                         widget.model.index,
                         dropdownValue,
-                        int.parse(_weightController.text),
-                        int.parse(value),
+                        int.tryParse(_weightController.text) ?? 0,
+                        int.tryParse(value) ?? 0,
                       ),
                     );
               },
