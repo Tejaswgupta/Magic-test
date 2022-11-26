@@ -99,8 +99,8 @@ class _WorkoutTileState extends ConsumerState<WorkoutTile> {
               icon: const Icon(Icons.edit)),
           IconButton(
               onPressed: () {
-                //TODO : Remove workout
-                // provider.removeWorkout(widget.index);
+                final box = Hive.box('magic');
+                box.deleteAt(widget.index);
               },
               icon: const Icon(Icons.delete))
         ],
