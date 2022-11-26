@@ -5,16 +5,16 @@ part 'set_model.g.dart';
 @HiveType(typeId: 1)
 class SetModel {
   @HiveField(0)
-  final int index;
+  int index;
 
   @HiveField(1)
-  final String workoutType;
+  String workoutType;
 
   @HiveField(2)
-  final int weight;
+  int weight;
 
   @HiveField(3)
-  final int reps;
+  int reps;
 
   SetModel(this.index, this.workoutType, this.weight, this.reps);
 }

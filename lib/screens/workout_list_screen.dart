@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:magic_test_project/models/set_model.dart';
 import 'package:magic_test_project/screens/workout_screen.dart';
-
-import '../provider/workout_provider.dart';
 
 class WorkoutListScreen extends ConsumerStatefulWidget {
   static const id = 'WorkoutListScreen';
@@ -17,7 +16,6 @@ class WorkoutListScreen extends ConsumerStatefulWidget {
 class _WorkoutListScreenState extends ConsumerState<WorkoutListScreen> {
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(workoutProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Workouts'),
@@ -26,13 +24,25 @@ class _WorkoutListScreenState extends ConsumerState<WorkoutListScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: ListView(
-              children: provider.workouts
-                  .map((value) =>
-                      WorkoutTile(index: value.index, sets: value.sets))
-                  .toList(),
-            ),
+          ValueListenableBuilder<Box>(
+            valueListenable: Hive.box('magic').listenable(),
+            builder: (context, box, widget) {
+              if (box.isEmpty) {
+                return const Center(child: Text('No workouts yet'));
+              }
+
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: box.length,
+                  itemBuilder: (context, index) {
+                    return WorkoutTile(
+                      index: index,
+                      sets: box.getAt(index)!.cast<SetModel>(),
+                    );
+                  },
+                ),
+              );
+            },
           ),
           Container(
             margin: const EdgeInsets.symmetric(vertical: 20),
@@ -66,7 +76,6 @@ class WorkoutTile extends ConsumerStatefulWidget {
 class _WorkoutTileState extends ConsumerState<WorkoutTile> {
   @override
   Widget build(BuildContext context) {
-    final provider = ref.watch(workoutProvider);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       child: Row(
@@ -90,7 +99,8 @@ class _WorkoutTileState extends ConsumerState<WorkoutTile> {
               icon: const Icon(Icons.edit)),
           IconButton(
               onPressed: () {
-                provider.removeWorkout(widget.index);
+                //TODO : Remove workout
+                // provider.removeWorkout(widget.index);
               },
               icon: const Icon(Icons.delete))
         ],

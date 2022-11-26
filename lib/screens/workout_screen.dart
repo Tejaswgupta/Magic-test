@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:magic_test_project/provider/set_provider.dart';
 
 import '../models/set_model.dart';
-import '../provider/workout_provider.dart';
 
 const List<String> workoutTypes = <String>[
   'Barbell row',
@@ -71,12 +70,11 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
             margin: const EdgeInsets.only(bottom: 20),
             child: ElevatedButton(
               onPressed: () {
+                var box = Hive.box('magic');
                 if (widget.index != null) {
-                  ref
-                      .read(workoutProvider)
-                      .editWorkout(widget.index!, provider.sets);
+                  box.putAt(widget.index!, provider.sets);
                 } else {
-                  ref.read(workoutProvider).addWorkout(provider.sets);
+                  box.add(provider.sets);
                 }
 
                 provider.reset();
