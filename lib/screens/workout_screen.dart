@@ -32,7 +32,7 @@ class _WorkoutScreenState extends ConsumerState<WorkoutScreen> {
   @override
   void initState() {
     if (widget.sets != null) {
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(Duration.zero, () {
         ref.read(setProvider).addSets(widget.sets!);
       });
     }
